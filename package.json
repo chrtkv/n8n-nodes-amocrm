@@ -1,19 +1,21 @@
 {
-  "name": "n8n-nodes-<...>",
+  "name": "n8n-nodes-amocrm",
   "version": "0.1.0",
   "description": "",
   "keywords": [
-    "n8n-community-node-package"
+    "n8n-community-node-package",
+    "amocrm",
+    "amo"
   ],
   "license": "MIT",
-  "homepage": "",
+  "homepage": "https://github.com/chrtkv/n8n-nodes-amocrm",
   "author": {
-    "name": "",
-    "email": ""
+    "name": "Kirill Chertkov",
+    "email": "chertkov.k@gmail.com"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/<...>/n8n-nodes-<...>.git"
+    "url": "https://github.com/chrtkv/n8n-nodes-amocrm.git"
   },
   "main": "index.js",
   "scripts": {
@@ -30,12 +32,10 @@
   "n8n": {
     "n8nNodesApiVersion": 1,
     "credentials": [
-      "dist/credentials/ExampleCredentialsApi.credentials.js",
-      "dist/credentials/HttpBinApi.credentials.js"
+      "dist/credentials/AmoOAuth2Api.credentials.js"
     ],
     "nodes": [
-      "dist/nodes/ExampleNode/ExampleNode.node.js",
-      "dist/nodes/HttpBin/HttpBin.node.js"
+      "dist/nodes/Amo/AmoCrm.node.js"
     ]
   },
   "devDependencies": {
