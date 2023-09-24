@@ -201,8 +201,8 @@ const getAllOperation: INodeProperties[] = [
 				routing: {
 					send: {
 						type: 'query',
-						property: '={{ order[$value] }}',
-						value: '={{ $property.order.value }}',
+						property: '={{ "order[" + $parameter["options"]["order_by"] + "]" }}',
+						value: '={{ $parameter["options"]["order"] }}',
 					},
 				},
 			},
