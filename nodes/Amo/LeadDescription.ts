@@ -96,6 +96,13 @@ const getAllOperation: INodeProperties[] = [
 				operation: ['getAll'],
 			},
 		},
+		routing: {
+			send: {
+				type: 'query',
+				property: 'page',
+				value: '={{ $value }}',
+			},
+		},
 	},
 	{
 		displayName: 'Options',
