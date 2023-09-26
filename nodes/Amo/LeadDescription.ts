@@ -1,5 +1,7 @@
 import type { INodeProperties } from 'n8n-workflow';
 
+import { prepareBody } from './GenericFunctions'
+
 export const leadOperations: INodeProperties[] = [
 	{
 		displayName: 'Operation',
@@ -32,6 +34,24 @@ export const leadOperations: INodeProperties[] = [
 					request: {
 						method: 'GET',
 						url: '/api/v4/leads',
+					},
+				},
+			},
+			{
+				name: 'Create',
+				value: 'create',
+				action: 'Create leads',
+				routing: {
+					send: {
+						preSend: [prepareBody],
+						type: 'body',
+					},
+					request: {
+						method: 'POST',
+						url: '/api/v4/leads',
+						headers: {
+							'Content-Type': 'application/json',
+						},
 					},
 				},
 			},
@@ -68,10 +88,37 @@ const getOperation: INodeProperties[] = [
 		options: [
 			{
 				displayName: 'With',
-				description: 'Whether to include additional data (contacts, loss_reason, etc.)',
+				description: 'Whether to include additional data',
 				name: 'with',
-				type: 'string',
-				default: '',
+				type: 'multiOptions',
+				default: [],
+				options: [
+					{
+						name: 'Catalog Elements',
+						value: 'catalog_elements',
+					},
+					{
+						name: 'Contacts',
+						value: 'contacts',
+					},
+					{
+						name: 'Is Price Modified By Robot',
+						value: 'is_price_modified_by_robot',
+					},
+					{
+						name: 'Loss Reason',
+						value: 'loss_reason',
+					},
+					{
+						name: 'Only Deleted',
+						value: 'only_deleted',
+						description: 'If this parameter is used, the API response will include deleted leads still in the bin',
+					},
+					{
+						name: 'Source ID',
+						value: 'source_id',
+					},
+				],
 				routing: {
 					send: {
 						type: 'query',
@@ -201,16 +248,72 @@ const getAllOperation: INodeProperties[] = [
 				routing: {
 					send: {
 						type: 'query',
-						property: '={{ "order[" + $parameter["options"]["order_by"] + "]" }}',
+						property: '={{ "order[" + $parameter["options"]["order_by"] + "]" }}', // TODO: make it depends on order field
 						value: '={{ $parameter["options"]["order"] }}',
 					},
 				},
 			},
 		],
+	},
+];
+
+const createOperation: INodeProperties[] = [
+	{
+		displayName: 'Name',
+		name: 'name',
+		type: 'string',
+		default: '',
+		displayOptions: {
+			show: {
+				resource: ['lead'],
+				operation: ['create'],
+			},
+		},
+		description: 'Lead name',
+	},
+	{
+		displayName: 'Price',
+		name: 'price',
+		type: 'number',
+		default: null,
+		displayOptions: {
+			show: {
+				resource: ['lead'],
+				operation: ['create'],
+			},
+		},
+		description: 'Lead budget',
+	},
+	{
+		displayName: 'Status ID',
+		name: 'status_id',
+		type: 'number',
+		default: null,
+		displayOptions: {
+			show: {
+				resource: ['lead'],
+				operation: ['create'],
+			},
+		},
+		description: 'Status ID. Default value is the first status of the main pipeline.',
+	},
+	{
+		displayName: 'Lead Data',
+		name: 'data',
+		type: 'json',
+		default: '',
+		displayOptions: {
+			show: {
+				resource: ['lead'],
+				operation: ['create'],
+			},
+		},
+		description: 'Any other fields to send',
 	}
 ];
 
 export const leadFields: INodeProperties[] = [
 	...getOperation,
 	...getAllOperation,
+	...createOperation,
 ];
