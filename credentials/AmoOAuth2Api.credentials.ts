@@ -1,6 +1,5 @@
 import {
 	IAuthenticateGeneric,
-	ICredentialTestRequest,
 	ICredentialType,
 	INodeProperties,
 } from 'n8n-workflow';
@@ -77,14 +76,6 @@ export class AmoOAuth2Api implements ICredentialType {
 			headers: {
 				Authorization: '={{"Bearer " + $credentials.token}}',
 			},
-		},
-	};
-
-	// The block below tells how this credential can be tested
-	test: ICredentialTestRequest = {
-		request: {
-			baseURL: '={{$credentials?.domain}}',
-			url: '/bearer',
 		},
 	};
 }
