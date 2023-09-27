@@ -24,10 +24,17 @@ export class AmoOAuth2Api implements ICredentialType {
 			default: 'https://www.amocrm.ru/oauth',
 		},
 		{
+			displayName: 'Base URL',
+			name: 'baseUrl',
+			type: 'string',
+			default: '',
+			required: true,
+		},
+		{
 			displayName: 'Access Token URL',
 			name: 'accessTokenUrl',
-			type: 'string',
-			default: '', // TODO: можно ли сделать, чтобы достаточно было ввести домен
+			type: 'hidden',
+			default: '={{ $credentials.baseUrl + "/oauth2/access_token" }}',
 		},
 		{
 			displayName: 'Client ID',
@@ -41,7 +48,7 @@ export class AmoOAuth2Api implements ICredentialType {
 			name: 'clientSecret',
 			type: 'string',
 			typeOptions: {
-							password: true,
+				password: true,
 			},
 			default: '',
 			required: true,
