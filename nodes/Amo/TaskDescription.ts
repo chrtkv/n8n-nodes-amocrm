@@ -69,11 +69,34 @@ const getAllOperation: INodeProperties[] = [
 		},
 	},
 	{
-		displayName: 'Options',
-		name: 'options',
+		displayName: 'Limit',
+		description: 'Max number of results to return',
+		name: 'limit',
+		type: 'number',
+		typeOptions: {
+			minValue: 1,
+		},
+		default: 50,
+		displayOptions: {
+			show: {
+				resource: ['task'],
+				operation: ['getAll'],
+			},
+		},
+		routing: {
+			send: {
+				type: 'query',
+				property: 'limit',
+				value: '={{ $value }}',
+			},
+		},
+	},
+	{
+		displayName: 'Filter',
+		name: 'filter',
 		type: 'collection',
 		default: {},
-		placeholder: 'Add Option',
+		placeholder: 'Filter Result',
 		displayOptions: {
 			show: {
 				resource: ['task'],
@@ -81,23 +104,6 @@ const getAllOperation: INodeProperties[] = [
 			},
 		},
 		options: [
-			{
-				displayName: 'Limit',
-				description: 'Max number of results to return',
-				name: 'limit',
-				type: 'number',
-				typeOptions: {
-					minValue: 1,
-				},
-				default: 50,
-				routing: {
-					send: {
-						type: 'query',
-						property: 'limit',
-						value: '={{ $value }}',
-					},
-				},
-			},
 			{
 				displayName: 'Responsible User ID',
 				description: 'Filter by responsible user ID. You can pass either a single ID or comma-separated multiple IDs.',
@@ -108,6 +114,63 @@ const getAllOperation: INodeProperties[] = [
 					send: {
 						property: 'filter[responsible_user_id]',
 						value: '={{ $value.split(",") }}',
+					},
+				},
+			},
+			{
+				displayName: 'Is Completed',
+				description: 'Filter by completed status. 1 is completed, 0 is not.',
+				name: 'is_completed',
+				type: 'string',
+				default: '',
+				routing: {
+					send: {
+						property: 'filter[is_completed]',
+						value: '={{ $value }}',
+					},
+				},
+			},
+			{
+				displayName: 'Task Type',
+				description: 'Filter by task type. You can pass either a single type ID or comma-separated multiple type IDs.',
+				name: 'task_type',
+				type: 'string',
+				default: '',
+				routing: {
+					send: {
+						property: 'filter[task_type]',
+						value: '={{ $value.split(",") }}',
+					},
+				},
+			},
+			{
+				displayName: 'Entity Type',
+				description: 'Filter by assigned entity type',
+				name: 'entity_type',
+				type: 'options',
+				default: 'leads',
+				options: [
+					{
+						name: 'Leads',
+						value: 'leads',
+					},
+					{
+						name: 'Contacts',
+						value: 'contacts',
+					},
+					{
+						name: 'Companies',
+						value: 'companies',
+					},
+					{
+						name: 'Customers',
+						value: 'customers',
+					},
+				],
+				routing: {
+					send: {
+						property: 'filter[entity_type]',
+						value: '={{ $value }}',
 					},
 				},
 			},
@@ -124,9 +187,23 @@ const getAllOperation: INodeProperties[] = [
 					},
 				},
 			},
+		],
+	},
+	{
+		displayName: 'Sort',
+		name: 'sort',
+		type: 'collection',
+		default: {},
+		placeholder: 'Sort Result',
+		displayOptions: {
+			show: {
+				resource: ['task'],
+				operation: ['getAll'],
+			},
+		},
+		options: [
 			{
-				displayName: 'Order',
-				description: 'Sorting order',
+				displayName: 'Sorting Order',
 				name: 'order',
 				type: 'options',
 				default: 'asc',
