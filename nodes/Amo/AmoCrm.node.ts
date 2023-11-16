@@ -11,6 +11,7 @@ export class AmoCrm implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'AmoCRM',
 		name: 'amoCrm',
+		icon: 'file:amocrm.svg',
 		group: ['transform'],
 		version: 1,
 		subtitle: '={{ $parameter["operation"] + ": " + $parameter["resource"] }}',
