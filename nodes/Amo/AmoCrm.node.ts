@@ -112,6 +112,43 @@ export class AmoCrm implements INodeType {
 
 				return returnData;
 			},
+
+			async getUsers(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+				const returnData: INodePropertyOptions[] = [];
+
+				let query;
+				let responseData;
+
+				do {
+					responseData = await amoApiRequest.call(
+						this,
+						'GET',
+						'/api/v4/users',
+						{},
+						query ?? { limit: 250 },
+					);
+
+					if (responseData._links.next) {
+						const nextUrl: URL = new URL(responseData._links.next.href);
+						query = Object.fromEntries(nextUrl.searchParams);
+					}
+
+					const { users } = responseData._embedded;
+
+					const fieldsValues = users
+						.filter(({ rights }: { rights: { is_active: boolean} }) => rights.is_active)
+						.map(({ name, id }: { name: string, id: number }) => (
+							{
+								name,
+								value: id,
+							}
+						));
+
+					returnData.push(...fieldsValues);
+				} while (responseData._links.next);
+
+				return returnData;
+			},
 		}
 	}
 };
